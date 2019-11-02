@@ -6,10 +6,16 @@ namespace EventDispatcher
 {
     public interface IEventDispatcher
     {
-        Task Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation)
+        void Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker)
             where TEvent : IEvent;
 
-        Task Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation)
+        void Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker)
+            where TEvent : IEvent;
+
+        Task Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken))
+            where TEvent : IEvent;
+
+        Task Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken))
             where TEvent : IEvent;
     }
 }

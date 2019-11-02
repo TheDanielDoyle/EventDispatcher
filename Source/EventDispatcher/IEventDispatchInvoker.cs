@@ -6,6 +6,8 @@ namespace EventDispatcher
     public interface IEventDispatchInvoker<in TEvent>
         where TEvent : IEvent
     {
-        Task Invoke(TEvent @event, CancellationToken cancellation);
+        void Invoke(TEvent @event);
+
+        Task Invoke(TEvent @event, CancellationToken cancellation = default(CancellationToken));
     }
 }
