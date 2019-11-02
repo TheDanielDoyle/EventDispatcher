@@ -8,6 +8,6 @@ namespace EventDispatcher
     {
         void Invoke(TEvent @event);
 
-        Task Invoke(TEvent @event, CancellationToken cancellation = default(CancellationToken));
+        Task InvokeAsync(TEvent @event, CancellationToken cancellation = default(CancellationToken));
     }
 }
