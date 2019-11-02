@@ -6,7 +6,20 @@ namespace EventDispatcher
 {
     public class EventDispatcher : IEventDispatcher
     {
-        public async Task Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker,  CancellationToken cancellation) 
+        public void Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker) where TEvent : IEvent
+        {
+            foreach (TEvent @event in events)
+            {
+                Dispatch(@event, invoker);
+            }
+        }
+
+        public void Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker) where TEvent : IEvent
+        {
+            invoker.Invoke(@event);
+        }
+
+        public async Task Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken)) 
             where TEvent : IEvent
         {
             foreach (TEvent @event in events)
@@ -15,7 +28,7 @@ namespace EventDispatcher
             }
         }
 
-        public async Task Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation) 
+        public async Task Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken))
             where TEvent : IEvent
         {
             await invoker.Invoke(@event, cancellation);
