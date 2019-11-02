@@ -19,19 +19,19 @@ namespace EventDispatcher
             invoker.Invoke(@event);
         }
 
-        public async Task Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken)) 
+        public async Task DispatchAsync<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken)) 
             where TEvent : IEvent
         {
             foreach (TEvent @event in events)
             {
-                await Dispatch(@event, invoker, cancellation);
+                await DispatchAsync(@event, invoker, cancellation);
             }
         }
 
-        public async Task Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken))
+        public async Task DispatchAsync<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken))
             where TEvent : IEvent
         {
-            await invoker.Invoke(@event, cancellation);
+            await invoker.InvokeAsync(@event, cancellation);
         }
     }
 }
