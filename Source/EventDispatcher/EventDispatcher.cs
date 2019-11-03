@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,32 +7,40 @@ namespace EventDispatcher
 {
     public class EventDispatcher : IEventDispatcher
     {
-        public void Dispatch<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker) where TEvent : IEvent
+        public void Dispatch<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers) where TEvent : IEvent
         {
+            IList<IEventDispatchHandler<TEvent>> handlerList = handlers.ToList();
             foreach (TEvent @event in events)
             {
-                Dispatch(@event, invoker);
+                Dispatch(@event, handlerList);
             }
         }
 
-        public void Dispatch<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker) where TEvent : IEvent
+        public void Dispatch<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers) where TEvent : IEvent
         {
-            invoker.Invoke(@event);
-        }
-
-        public async Task DispatchAsync<TEvent>(IEnumerable<TEvent> events, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken)) 
-            where TEvent : IEvent
-        {
-            foreach (TEvent @event in events)
+            foreach (IEventDispatchHandler<TEvent> handler in handlers)
             {
-                await DispatchAsync(@event, invoker, cancellation);
+                handler.Handle(@event);
             }
         }
 
-        public async Task DispatchAsync<TEvent>(TEvent @event, IEventDispatchInvoker<TEvent> invoker, CancellationToken cancellation = default(CancellationToken))
+        public async Task DispatchAsync<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken)) 
             where TEvent : IEvent
         {
-            await invoker.InvokeAsync(@event, cancellation);
+            IList<IEventDispatchHandler<TEvent>> handlerList = handlers.ToList();
+            foreach (TEvent @event in events)
+            {
+                await DispatchAsync(@event, handlerList, cancellation);
+            }
+        }
+
+        public async Task DispatchAsync<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken))
+            where TEvent : IEvent
+        {
+            foreach (IEventDispatchHandler<TEvent> handler in handlers)
+            {
+                await handler.HandleAsync(@event, cancellation);
+            }
         }
     }
 }
