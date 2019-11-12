@@ -30,7 +30,7 @@ namespace EventDispatcher
             IList<IEventDispatchHandler<TEvent>> handlerList = handlers.ToList();
             foreach (TEvent @event in events)
             {
-                await DispatchAsync(@event, handlerList, cancellation);
+                await DispatchAsync(@event, handlerList, cancellation).ConfigureAwait(false);
             }
         }
 
@@ -39,7 +39,7 @@ namespace EventDispatcher
         {
             foreach (IEventDispatchHandler<TEvent> handler in handlers)
             {
-                await handler.HandleAsync(@event, cancellation);
+                await handler.HandleAsync(@event, cancellation).ConfigureAwait(false);
             }
         }
     }
