@@ -9,13 +9,13 @@ namespace EventDispatcher
         void Dispatch<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers)
             where TEvent : IEvent;
 
-        void Dispatch<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> invokers)
+        void Dispatch<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers)
             where TEvent : IEvent;
 
-        Task DispatchAsync<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> invokers, CancellationToken cancellation = default(CancellationToken))
+        Task DispatchAsync<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken))
             where TEvent : IEvent;
 
-        Task DispatchAsync<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> invokers, CancellationToken cancellation = default(CancellationToken))
+        Task DispatchAsync<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken))
             where TEvent : IEvent;
     }
 }

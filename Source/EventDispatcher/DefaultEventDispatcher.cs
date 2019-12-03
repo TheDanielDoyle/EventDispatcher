@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EventDispatcher
 {
-    public class EventDispatcher : IEventDispatcher
+    public class DefaultEventDispatcher : IEventDispatcher
     {
         public void Dispatch<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers) where TEvent : IEvent
         {
@@ -18,7 +18,7 @@ namespace EventDispatcher
 
         public void Dispatch<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers) where TEvent : IEvent
         {
-            foreach (IEventDispatchHandler<TEvent> handler in handlers)
+            foreach (IEventDispatchHandler<TEvent> handler in handlers.ToList())
             {
                 handler.Handle(@event);
             }
@@ -34,10 +34,9 @@ namespace EventDispatcher
             }
         }
 
-        public async Task DispatchAsync<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken))
-            where TEvent : IEvent
+        public async Task DispatchAsync<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken)) where TEvent : IEvent
         {
-            foreach (IEventDispatchHandler<TEvent> handler in handlers)
+            foreach (IEventDispatchHandler<TEvent> handler in handlers.ToList())
             {
                 await handler.HandleAsync(@event, cancellation).ConfigureAwait(false);
             }
