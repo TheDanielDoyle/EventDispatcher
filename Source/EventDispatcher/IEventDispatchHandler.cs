@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace EventDispatcher
 {
-    public interface IEventDispatchHandler<in TEvent> : IEventDispatcherHandler
+    public interface IEventDispatchHandler<in TEvent> : IEventDispatchHandler
         where TEvent : IEvent
     {
         void Handle(TEvent @event);
@@ -11,7 +11,7 @@ namespace EventDispatcher
         Task HandleAsync(TEvent @event, CancellationToken cancellation = default(CancellationToken));
     }
 
-    public interface IEventDispatcherHandler
+    public interface IEventDispatchHandler
     {
     }
 }
