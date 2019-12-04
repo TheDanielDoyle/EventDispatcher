@@ -4,6 +4,6 @@ namespace EventDispatcher
 {
     public interface IEventCollection : IReadOnlyCollection<IEvent>
     {
-        IEventCollection OfType<TEvent>() where TEvent : IEvent;
+        IEventCollection OfType<TEvent>();
     }
 }

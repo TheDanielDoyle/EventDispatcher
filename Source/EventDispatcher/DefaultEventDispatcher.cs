@@ -7,7 +7,7 @@ namespace EventDispatcher
 {
     public class DefaultEventDispatcher : IEventDispatcher
     {
-        public void Dispatch<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers) where TEvent : IEvent
+        public void Dispatch<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers)
         {
             IList<IEventDispatchHandler<TEvent>> handlerList = handlers.ToList();
             foreach (TEvent @event in events)
@@ -16,7 +16,7 @@ namespace EventDispatcher
             }
         }
 
-        public void Dispatch<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers) where TEvent : IEvent
+        public void Dispatch<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers)
         {
             foreach (IEventDispatchHandler<TEvent> handler in handlers.ToList())
             {
@@ -24,8 +24,7 @@ namespace EventDispatcher
             }
         }
 
-        public async Task DispatchAsync<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken)) 
-            where TEvent : IEvent
+        public async Task DispatchAsync<TEvent>(IEnumerable<TEvent> events, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken))
         {
             IList<IEventDispatchHandler<TEvent>> handlerList = handlers.ToList();
             foreach (TEvent @event in events)
@@ -34,7 +33,7 @@ namespace EventDispatcher
             }
         }
 
-        public async Task DispatchAsync<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken)) where TEvent : IEvent
+        public async Task DispatchAsync<TEvent>(TEvent @event, IEnumerable<IEventDispatchHandler<TEvent>> handlers, CancellationToken cancellation = default(CancellationToken))
         {
             foreach (IEventDispatchHandler<TEvent> handler in handlers.ToList())
             {

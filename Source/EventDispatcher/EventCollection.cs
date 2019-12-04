@@ -14,7 +14,7 @@ namespace EventDispatcher
         {
         }
 
-        public IEventCollection OfType<TEvent>() where TEvent : IEvent
+        public IEventCollection OfType<TEvent>()
         {
             return new EventCollection(this.Where(t => GetType() == typeof(TEvent)));
         }
