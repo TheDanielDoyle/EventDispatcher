@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -14,9 +15,32 @@ namespace EventDispatcher
         {
         }
 
-        public IEventCollection OfType<TEvent>()
+        public IEventCollection AssignableTo<TEvent>() where TEvent : IEvent
         {
-            return new EventCollection(this.Where(t => GetType() == typeof(TEvent)));
+            return AssignableTo(typeof(TEvent));
+        }
+
+        public IEventCollection AssignableTo(Type eventType)
+        {
+            if (eventType.IsInstanceOfType(typeof(IEvent)))
+            {
+                throw new ArgumentException($"{eventType.Name} is not an instance of {nameof(IEvent)}");
+            }
+            return new EventCollection(this.Where(eventType.IsInstanceOfType));
+        }
+
+        public IEventCollection OfType<TEvent>() where TEvent : IEvent
+        {
+            return OfType(typeof(TEvent));
+        }
+
+        public IEventCollection OfType(Type eventType)
+        {
+            if (eventType.IsInstanceOfType(typeof(IEvent)))
+            {
+                throw new ArgumentException($"{eventType.Name} is not an instance of {nameof(IEvent)}");
+            }
+            return new EventCollection(this.Where(t => GetType() == eventType));
         }
     }
 }

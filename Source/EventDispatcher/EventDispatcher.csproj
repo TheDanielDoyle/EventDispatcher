@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>EventDispatcher</RootNamespace>
     <Authors>Daniel P. Doyle</Authors>
     <Product>Event Dispatcher</Product>
@@ -11,5 +11,9 @@
     <PackageProjectUrl>https://github.com/TheDanielDoyle/EventDispatcher</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TheDanielDoyle/EventDispatcher</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TheDanielDoyle.EventDispatcher.Abstractions" Version="2.0.0" />
+  </ItemGroup>
 
 </Project>
