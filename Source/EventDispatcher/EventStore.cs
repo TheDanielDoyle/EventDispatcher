@@ -26,5 +26,10 @@ namespace EventDispatcher
                 AddEvent(@event);
             }
         }
+
+        public void ClearEvents()
+        {
+            this.events.Clear();
+        }
     }
 }
