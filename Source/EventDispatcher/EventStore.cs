@@ -13,7 +13,7 @@ namespace EventDispatcher
         }
 
         public IEventCollection Events { get; }
-        
+
         public void AddEvent(IEvent @event)
         {
             events.Add(@event);

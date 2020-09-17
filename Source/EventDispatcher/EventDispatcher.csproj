@@ -7,7 +7,7 @@
     <Product>Event Dispatcher</Product>
     <PackageId>TheDanielDoyle.EventDispatcher</PackageId>
     <Description>A framework to dispatch events, in the form of classes implementing IEvent.</Description>
-    <Copyright>© 2019 Daniel P. Doyle</Copyright>
+    <Copyright>© 2020 Daniel P. Doyle</Copyright>
     <PackageProjectUrl>https://github.com/TheDanielDoyle/EventDispatcher</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TheDanielDoyle/EventDispatcher</RepositoryUrl>
   </PropertyGroup>

@@ -10,17 +10,23 @@ namespace EventDispatcher
     public abstract class DefaultEventDispatcherContext : IEventDispatcherContext
     {
         private readonly IEventDispatcher dispatcher;
+        private readonly IEventReflector eventReflector;
 
-        protected DefaultEventDispatcherContext(IEventDispatcher dispatcher)
+        protected DefaultEventDispatcherContext(IEventDispatcher dispatcher) : this(dispatcher, new EventReflector())
+        {
+        }
+
+        protected DefaultEventDispatcherContext(IEventDispatcher dispatcher, IEventReflector eventReflector)
         {
             this.dispatcher = dispatcher;
+            this.eventReflector = eventReflector;
         }
 
         public void Dispatch<TEvent>() where TEvent : IEvent
         {
             try
             {
-                foreach (IEvent @event in GetEvents(typeof(TEvent)))
+                foreach (IEvent @event in GetEvents(typeof(TEvent)).ToList())
                 {
                     InvokeDispatch(@event);
                 }
@@ -35,7 +41,7 @@ namespace EventDispatcher
         {
             try
             {
-                foreach (IEvent @event in GetEvents(typeof(TEvent)))
+                foreach (IEvent @event in GetEvents(typeof(TEvent)).ToList())
                 {
                     await InvokeDispatchAsync(@event, cancellationToken).ConfigureAwait(false);
                 }
@@ -50,33 +56,9 @@ namespace EventDispatcher
 
         protected abstract IEnumerable<IEvent> GetEvents(Type eventType);
 
-        private Type CreateHandlerCollectionType(Type eventType)
-        {
-            Type genericEnumerableType = typeof(IEnumerable<>);
-            Type genericHandlerType = typeof(IEventDispatchHandler<>);
-            Type concreteHandlerType = genericHandlerType.MakeGenericType(eventType);
-            return genericEnumerableType.MakeGenericType(concreteHandlerType);
-        }
-
-        private MethodInfo GetDispatchAsyncMethod(Type eventType)
-        {
-            MethodInfo dispatchMethod = typeof(IEventDispatcher)
-                .GetMethods()
-                .FirstOrDefault(m => m.Name == nameof(IEventDispatcher.DispatchAsync) && m.GetParameters().First().Name == "event");
-            return dispatchMethod?.MakeGenericMethod(new[] { eventType });
-        }
-
-        private MethodInfo GetDispatchMethod(Type eventType)
-        {
-            MethodInfo dispatchMethod = typeof(IEventDispatcher)
-                .GetMethods()
-                .FirstOrDefault(m => m.Name == nameof(IEventDispatcher.Dispatch) && m.GetParameters().First().Name == "event");
-            return dispatchMethod?.MakeGenericMethod(new[] { eventType });
-        }
-
         private IEventDispatchHandler[] GetHandlers(Type eventType)
         {
-            Type handlerCollectionType = CreateHandlerCollectionType(eventType);
+            Type handlerCollectionType = this.eventReflector.GetHandlerCollectionType(eventType);
             return CreateHandlers(handlerCollectionType);
         }
 
@@ -84,11 +66,7 @@ namespace EventDispatcher
         {
             Type eventType = @event.GetType();
             IEventDispatchHandler[] handlers = GetHandlers(eventType);
-            MethodInfo dispatchMethod = GetDispatchMethod(eventType);
-            if (dispatchMethod == null)
-            {
-                throw new EventDispatcherContextException($"Unable to find {nameof(IEventDispatcher.Dispatch)} method using reflection.");
-            }
+            MethodInfo dispatchMethod = this.eventReflector.GetDispatchMethod(eventType);
             if (handlers == null || handlers.Length == 0)
             {
                 throw new EventDispatcherContextException($"There are no handlers registered to handle {@event.GetType().Name}");
@@ -100,11 +78,7 @@ namespace EventDispatcher
         {
             Type eventType = @event.GetType();
             IEventDispatchHandler[] handlers = GetHandlers(eventType);
-            MethodInfo dispatchMethod = GetDispatchAsyncMethod(eventType);
-            if (dispatchMethod == null)
-            {
-                throw new EventDispatcherContextException($"Unable to find {nameof(IEventDispatcher.DispatchAsync)} method using reflection.");
-            }
+            MethodInfo dispatchMethod = this.eventReflector.GetDispatchAsyncMethod(eventType);
             if (handlers == null || handlers.Length == 0)
             {
                 throw new EventDispatcherContextException($"There are no handlers registered to handle {@event.GetType().Name}");
