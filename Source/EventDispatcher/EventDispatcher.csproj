@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>EventDispatcher</RootNamespace>
     <Authors>Daniel P. Doyle</Authors>
     <Product>Event Dispatcher</Product>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TheDanielDoyle.EventDispatcher.Abstractions" Version="5.0.0" />
+    <PackageReference Include="TheDanielDoyle.EventDispatcher.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
 </Project>
