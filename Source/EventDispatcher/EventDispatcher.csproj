@@ -1,19 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>EventDispatcher</RootNamespace>
     <Authors>Daniel P. Doyle</Authors>
     <Product>Event Dispatcher</Product>
     <PackageId>TheDanielDoyle.EventDispatcher</PackageId>
     <Description>A framework to dispatch events, in the form of classes implementing IEvent.</Description>
-    <Copyright>© 2020 Daniel P. Doyle</Copyright>
+    <Copyright>© 2022 Daniel P. Doyle</Copyright>
     <PackageProjectUrl>https://github.com/TheDanielDoyle/EventDispatcher</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TheDanielDoyle/EventDispatcher</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TheDanielDoyle.EventDispatcher.Abstractions" Version="2.0.1" />
+    <PackageReference Include="TheDanielDoyle.EventDispatcher.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
